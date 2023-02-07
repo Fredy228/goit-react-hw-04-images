@@ -1,4 +1,4 @@
-import React from "react";
+import {useState, useCallback} from "react";
 import { Container } from "./App.styled";
 import {Searchbar} from 'components/Searchbar/Searchbar';
 import {ImageGallery} from 'components/ImageGallery/ImageGallery';
@@ -6,70 +6,60 @@ import { Button } from "components/Button/Button";
 import {Modal} from "components/Modal/Modal";
 import { Loader } from "components/Loader/Loader";
 
-class App extends React.Component {
-  state = {
-    query: '',
-    page: 1,
-    status: 'idle',
-    isShowButton: false,
-    isShowModal: false,
-    largeImg: ''
-  }
-    // 'idle'
-    // 'pending'
-    // 'resolved'
-    // 'rejected'
+export const App = () => {
+ 
+  const [query, setQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const [status, setStatus] = useState('idle');
+  const [isShowButton, setIsShowButton] = useState(false);
+  const [isShowModal, setIsShowModal] = useState(false);
+  const [largeImg, setLargeImg] = useState('');
 
-  hendleSearchQuery = (searchName) => {
-    if(searchName !== this.state.query) {
-      this.setState({query: searchName, page: 1})
+  const hendleSearchQuery = (searchName) => {
+    if(searchName !== query) {
+      setQuery(searchName);
+      setPage(1)
     }
   }
 
-  changePage = () => {
-    this.setState(prevState => ({page: prevState.page + 1}))
+  const changePage = () => {
+    setPage(prevS => prevS + 1)
   }
+  
+  const changeStatus = useCallback((statusNew) => {
+    setStatus(statusNew);
+  }, [])
 
-  changeStatus = (statusNow) => {
-    this.setState({status: statusNow})
-  }
-
-  toggleButton = (totalHits) => {
-    if (totalHits / 12 >= this.state.page) {
-      this.setState({isShowButton: true})
+  const toggleButton = useCallback((totalHits) => {
+    if (totalHits / 12 >= page) {
+      setIsShowButton(true)
     } else {
-      this.setState({isShowButton: false})
+      setIsShowButton(false)
     }
+  }, [page])
+
+  const toggleModal = (url) => {
+    setIsShowModal(prevS => !prevS);
+    setLargeImg(url);
   }
-
-  toggleModal = (url) => {
-    this.setState(({isShowModal}) => ({isShowModal: !isShowModal, largeImg: url}));
-  }
-
-
-
-  render () {
-    const {query, page, status, isShowButton, isShowModal, largeImg} = this.state;
    
     return (
       <>
-        <Searchbar onSubmitForm={this.hendleSearchQuery}/>
+        <Searchbar onSubmitForm={hendleSearchQuery}/>
         <Container>
           <ImageGallery 
           querySearch={String(query)} 
           pageSearch={page}
-          changeStatus={this.changeStatus}
-          toggleButton={this.toggleButton}
-          toggleModal={this.toggleModal}/>
+          changeStatus={changeStatus}
+          toggleButton={toggleButton}
+          toggleModal={toggleModal}/>
 
           {status === 'pending' && <Loader/>}
 
-          {isShowModal && <Modal url={largeImg} toggleModal={this.toggleModal}/>}
+          {isShowModal && <Modal url={largeImg} toggleModal={toggleModal}/>}
 
-          {isShowButton && <Button onLoadMore={this.changePage}/>}
+          {isShowButton && <Button onLoadMore={changePage}/>}
         </Container>
       </>
     )
-  }
 }
- export default App;

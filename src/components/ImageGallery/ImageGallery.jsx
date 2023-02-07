@@ -39,8 +39,8 @@ export const ImageGallery = ({querySearch, pageSearch, changeStatus, toggleButto
             changeStatus('resolved');
         })
         .catch(error => {
-            changeStatus('rejected')
-            console.log(error)
+            changeStatus('rejected');
+            console.log(error);
         })
     }, [querySearch, pageSearch, changeStatus, toggleButton])
 
