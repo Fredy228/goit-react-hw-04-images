@@ -1,7 +1,7 @@
 import React from "react";
 import { Container } from "./App.styled";
 import {Searchbar} from 'components/Searchbar/Searchbar';
-import ImageGallery from 'components/ImageGallery/ImageGallery';
+import {ImageGallery} from 'components/ImageGallery/ImageGallery';
 import { Button } from "components/Button/Button";
 import Modal from "components/Modal/Modal";
 import { Loader } from "components/Loader/Loader";
@@ -52,22 +52,23 @@ class App extends React.Component {
     const {query, page, status, isShowButton, isShowModal, largeImg} = this.state;
    
     return (
-      <Container>
+      <>
         <Searchbar onSubmitForm={this.hendleSearchQuery}/>
+        <Container>
+          <ImageGallery 
+          querySearch={String(query)} 
+          pageSearch={page}
+          changeStatus={this.changeStatus}
+          toggleButton={this.toggleButton}
+          toggleModal={this.toggleModal}/>
 
-        <ImageGallery 
-        querySearch={String(query)} 
-        pageSearch={page}
-        changeStatus={this.changeStatus}
-        toggleButton={this.toggleButton}
-        toggleModal={this.toggleModal}/>
+          {status === 'pending' && <Loader/>}
 
-        {status === 'pending' && <Loader/>}
+          {isShowModal && <Modal url={largeImg} toggleModal={this.toggleModal}/>}
 
-        {isShowModal && <Modal url={largeImg} toggleModal={this.toggleModal}/>}
-
-        {isShowButton && <Button onLoadMore={this.changePage}/>}
-      </Container>
+          {isShowButton && <Button onLoadMore={this.changePage}/>}
+        </Container>
+      </>
     )
   }
 }
