@@ -42,7 +42,7 @@ export const ImageGallery = ({querySearch, pageSearch, changeStatus, toggleButto
             changeStatus('rejected')
             console.log(error)
         })
-    }, [querySearch, pageSearch])
+    }, [querySearch, pageSearch, changeStatus, toggleButton])
 
         if(hits.length !== 0) {
             return (

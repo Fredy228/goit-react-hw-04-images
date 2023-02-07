@@ -21,7 +21,6 @@ export const Searchbar = ({onSubmitForm}) => {
         event.currentTarget.reset();
     }
 
-    
     return (
         <BarBlock>
             <SearchForm onSubmit={submitForm}>
