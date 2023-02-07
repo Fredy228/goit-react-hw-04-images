@@ -8,17 +8,17 @@ const modalRoot = document.querySelector('#modal-root')
 export const Modal = ({toggleModal, url}) => {
 
     useEffect(() => {
+        function handleKeyDown(event) {
+            if(event.code === 'Escape') {
+                toggleModal()
+            }
+        }
+
         window.addEventListener('keydown', handleKeyDown)
         return () => {
             window.removeEventListener('keydown', handleKeyDown)
         }
-    }, [])
-
-    const handleKeyDown = (event) => {
-        if(event.code === 'Escape') {
-            toggleModal()
-        }
-    }
+    }, [toggleModal])
 
     const handleBackdropClick = (event) => {
         if(event.target === event.currentTarget) {
