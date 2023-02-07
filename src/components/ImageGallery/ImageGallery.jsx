@@ -18,6 +18,10 @@ export const ImageGallery = ({querySearch, pageSearch, changeStatus, toggleButto
         changeStatus('pending');
         getImgagesAPI(querySearch, pageSearch)
         .then(response => {
+            console.log(response)
+            if(response.total === 0) {
+                window.alert('Oops... Found nothing :(');
+            }
             let arrayImg = [];
             toggleButton(response.totalHits);
             response.hits.map(({id, webformatURL, largeImageURL}) => {
